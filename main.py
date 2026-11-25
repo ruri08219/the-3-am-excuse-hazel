@@ -11,12 +11,16 @@ import sys
 
 ENTRY = "It's 3 AM. My keys are asleep, my screen is dreaming in hex, and last time you signed half-awake you bought a frog in a hat. Come back at sunrise."
 
+MAX_CHARS = 200
+
 
 def main() -> int:
     out_dir = sys.argv[1] if len(sys.argv) > 1 else os.environ.get("OUTPUT_DIR", "/output")
     text = ENTRY
-    if not 1 <= len(text) <= 200:
-        raise SystemExit(f"entry is {len(text)} characters, must be 1-200")
+    if "\n" in text or "\r" in text:
+        raise SystemExit("entry must be a single line")
+    if not 1 <= len(text) <= MAX_CHARS:
+        raise SystemExit(f"entry is {len(text)} characters, must be 1-{MAX_CHARS}")
     if not text.strip():
         raise SystemExit("entry is blank")
     os.makedirs(out_dir, exist_ok=True)
